@@ -170,10 +170,10 @@ export default function App() {
           Request details
         </h2>
 
-        <div className="max-w-5xl space-y-4">
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 sm:gap-8">
-            <label className="flex flex-col gap-1 min-w-0 flex-1 sm:max-w-[46%]">
-            <span className="text-gray-800">Request by:</span>
+        <div className="max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-4">
+            <label className="flex flex-col gap-1 min-w-0">
+              <span className="text-gray-800">Request by:</span>
               <input
                 type="text"
                 value={requestBy}
@@ -182,7 +182,8 @@ export default function App() {
                 className="border border-gray-400 rounded px-3 py-2 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
               />
             </label>
-            <label className="flex flex-col gap-1 min-w-0 w-full sm:w-[42%] sm:shrink-0">
+
+            <label className="flex flex-col gap-1 min-w-0">
               <span className="text-gray-800">Date of Request:</span>
               <input
                 type="date"
@@ -191,10 +192,31 @@ export default function App() {
                 className="border border-gray-400 rounded px-3 py-2 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
               />
             </label>
+
+            <label className="flex flex-col gap-1 min-w-0">
+              <span className="text-gray-800">Date Required:</span>
+              <input
+                type="date"
+                value={dateRequired}
+                onChange={(e) => setDateRequired(e.target.value)}
+                className="border border-gray-400 rounded px-3 py-2 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              />
+            </label>
+
+            <label className="flex flex-col gap-1 min-w-0">
+              <span className="text-gray-800">Verify by:</span>
+              <input
+                type="text"
+                value={verifyBy}
+                onChange={(e) => setVerifyBy(e.target.value)}
+                placeholder="Verifier name"
+                className="w-full border border-gray-400 rounded px-3 py-2 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              />
+            </label>
           </div>
 
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 sm:gap-8">
-            <label className="flex flex-col gap-1 min-w-0 flex-1 sm:max-w-[46%]">
+          <div className="space-y-4">
+            <label className="flex flex-col gap-1 min-w-0">
               <span className="text-gray-800">Payment to:</span>
               <input
                 type="text"
@@ -204,49 +226,29 @@ export default function App() {
                 className="border border-gray-400 rounded px-3 py-2 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
               />
             </label>
-            <label className="flex flex-col gap-1 min-w-0 w-full sm:w-[42%] sm:shrink-0">
-              <span className="text-gray-800">Date Required:</span>
+
+            <label className="flex flex-col gap-1 min-w-0">
+              <span className="text-gray-800">Bank Account No:</span>
               <input
-                type="date"
-                value={dateRequired}
-                onChange={(e) => setDateRequired(e.target.value)}
-                className="border border-gray-400 rounded px-3 py-2 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                type="text"
+                value={bankAccountNo}
+                onChange={(e) => setBankAccountNo(e.target.value)}
+                placeholder="Account number"
+                className="w-full border border-gray-400 rounded px-3 py-2 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              />
+            </label>
+
+            <label className="flex flex-col gap-1 min-w-0">
+              <span className="text-gray-800">Bank account holder name:</span>
+              <input
+                type="text"
+                value={holderName}
+                onChange={(e) => setHolderName(e.target.value)}
+                placeholder="Account holder name"
+                className="w-full border border-gray-400 rounded px-3 py-2 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
               />
             </label>
           </div>
-
-          <label className="flex flex-col gap-1 min-w-0 flex-1 sm:max-w-[46%]">
-            <span className="text-gray-800">Bank Account No:</span>
-            <input
-              type="text"
-              value={bankAccountNo}
-              onChange={(e) => setBankAccountNo(e.target.value)}
-              placeholder="Account number"
-              className="w-full border border-gray-400 rounded px-3 py-2 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-            />
-          </label>
-
-          <label className="flex flex-col gap-1 min-w-0 flex-1 sm:max-w-[46%]">
-            <span className="text-gray-800">Holder Name:</span>
-            <input
-              type="text"
-              value={holderName}
-              onChange={(e) => setHolderName(e.target.value)}
-              placeholder="Account holder name"
-              className="w-full border border-gray-400 rounded px-3 py-2 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-            />
-          </label>
-
-          <label className="flex flex-col gap-1 min-w-0 flex-1 sm:max-w-[46%]">
-            <span className="text-gray-800">Verify by:</span>
-            <input
-              type="text"
-              value={verifyBy}
-              onChange={(e) => setVerifyBy(e.target.value)}
-              placeholder="Verifier name"
-              className="w-full border border-gray-400 rounded px-3 py-2 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-            />
-          </label>
         </div>
 
         <div className="mt-10 max-w-5xl text-left">
@@ -258,7 +260,7 @@ export default function App() {
               onChange={(e) => setServicesChecked(e.target.checked)}
               className="mt-1 size-4 border-gray-400 rounded text-blue-600 focus:ring-blue-500 shrink-0"
             />
-            <span className="text-gray-800">Services (ECC, EMOC)</span>
+            <span className="text-gray-800">Services (Emergency Child Care Services, Emergency Obstetric Care Services)</span>
           </label>
         </div>
       </div>
@@ -439,9 +441,7 @@ export default function App() {
                   textAlign: 'left',
                 }}
               >
-                <span style={{ fontWeight: 700 }}>
-                  Request by:
-                </span>
+                <span style={{ fontWeight: 700 }}>Request by:</span>
                 <span style={{ fontWeight: 400 }}> {requestBy || '—'}</span>
               </td>
               <td style={{ width: '18%', padding: 0 }} aria-hidden="true" />
@@ -453,8 +453,8 @@ export default function App() {
                   textAlign: 'left',
                 }}
               >
-                <span style={{ fontWeight: 700 }}>Date of Request:</span>
-                <span style={{ fontWeight: 400 }}> {formatDateDisplay(dateOfRequest)}</span>
+                <span style={{ fontWeight: 700 }}>Payment to:</span>
+                <span style={{ fontWeight: 400 }}> {paymentTo || '—'}</span>
               </td>
             </tr>
             <tr>
@@ -465,44 +465,34 @@ export default function App() {
                   textAlign: 'left',
                 }}
               >
-                <span style={{ fontWeight: 700 }}>Payment to:</span>
-                <span style={{ fontWeight: 400 }}> {paymentTo || '—'}</span>
+                <span style={{ fontWeight: 700 }}>Date of Request:</span>
+                <span style={{ fontWeight: 400 }}> {formatDateDisplay(dateOfRequest)}</span>
               </td>
               <td style={{ padding: 0 }} aria-hidden="true" />
               <td style={{ padding: '0 0 10px 0', verticalAlign: 'top', textAlign: 'left' }}>
-                <span style={{ fontWeight: 700 }}>Date Required:</span>
-                <span style={{ fontWeight: 400 }}> {formatDateDisplay(dateRequired)}</span>
-              </td>
-            </tr>
-            <tr>
-              <td
-                colSpan={3}
-                style={{
-                  padding: '4px 16px 8px 0',
-                  verticalAlign: 'top',
-                  textAlign: 'left',
-                }}
-              >
                 <span style={{ fontWeight: 700 }}>Bank Account No:</span>
                 <span style={{ fontWeight: 400 }}> {bankAccountNo || '—'}</span>
               </td>
             </tr>
             <tr>
               <td
-                colSpan={3}
                 style={{
-                  padding: '0 16px 8px 0',
+                  padding: '0 16px 10px 0',
                   verticalAlign: 'top',
                   textAlign: 'left',
                 }}
               >
+                <span style={{ fontWeight: 700 }}>Date Required:</span>
+                <span style={{ fontWeight: 400 }}> {formatDateDisplay(dateRequired)}</span>
+              </td>
+              <td style={{ padding: 0 }} aria-hidden="true" />
+              <td style={{ padding: '0 0 10px 0', verticalAlign: 'top', textAlign: 'left' }}>
                 <span style={{ fontWeight: 700 }}>Holder Name:</span>
                 <span style={{ fontWeight: 400 }}> {holderName || '—'}</span>
               </td>
             </tr>
             <tr>
               <td
-                colSpan={3}
                 style={{
                   padding: '0 16px 12px 0',
                   verticalAlign: 'top',
@@ -512,6 +502,8 @@ export default function App() {
                 <span style={{ fontWeight: 700 }}>Verify by:</span>
                 <span style={{ fontWeight: 400 }}> {verifyBy || '—'}</span>
               </td>
+              <td style={{ padding: 0 }} aria-hidden="true" />
+              <td style={{ padding: '0 0 12px 0' }} />
             </tr>
             <tr>
               <td
@@ -535,7 +527,7 @@ export default function App() {
                   textAlign: 'left',
                 }}
               >
-                {servicesChecked ? '☑' : '☐'} Services (ECC, EMOC)
+                {servicesChecked ? '☑' : '☐'} Services (Emergency Child Care Services, Emergency Obstetric Care Services)
               </td>
             </tr>
           </tbody>
