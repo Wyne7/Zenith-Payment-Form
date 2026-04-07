@@ -54,6 +54,14 @@ body {
   margin: 0;
 }
 
+input[type='text'],
+input[type='number'],
+input[type='date'],
+textarea,
+select {
+  font-family: Calibri, Arial, sans-serif;
+}
+
 #root {
   width: 1126px;
   max-width: 100%;

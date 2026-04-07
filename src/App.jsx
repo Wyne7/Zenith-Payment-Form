@@ -157,7 +157,10 @@ export default function App() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8 bg-gray-50 min-h-screen">
+    <div
+      className="max-w-6xl mx-auto px-4 py-8 bg-gray-50 min-h-screen"
+      style={{ fontFamily: 'Calibri, Arial, sans-serif' }}
+    >
       {/* Header */}
       <h1 className="text-3xl font-bold text-center mb-8 text-gray-800 flex flex-col gap-1 items-center">
         <span>Zenith TRI</span>
@@ -411,7 +414,7 @@ export default function App() {
           backgroundColor: '#ffffff',
           padding: '15mm',
           boxSizing: 'border-box',
-          fontFamily: 'Arial, Helvetica, sans-serif',
+          fontFamily: 'Calibri, Arial, sans-serif',
           fontSize: '14px',
         }}
       >
@@ -424,7 +427,7 @@ export default function App() {
           style={{
             width: '100%',
             borderCollapse: 'collapse',
-            fontFamily: 'Times New Roman, Times, serif',
+            fontFamily: 'Calibri, Arial, sans-serif',
             fontSize: '13px',
             lineHeight: '1.5',
             marginBottom: '22px',
