@@ -242,7 +242,7 @@ export default function App() {
             </label>
 
             <label className="flex flex-col gap-1 min-w-0">
-              <span className="text-gray-800">Bank account holder name:</span>
+              <span className="text-gray-800">Bank Account Hoder Name:</span>
               <input
                 type="text"
                 value={holderName}
@@ -490,7 +490,7 @@ export default function App() {
               </td>
               <td style={{ padding: 0 }} aria-hidden="true" />
               <td style={{ padding: '0 0 10px 0', verticalAlign: 'top', textAlign: 'left' }}>
-                <span style={{ fontWeight: 700 }}>Holder Name:</span>
+                <span style={{ fontWeight: 700 }}>Bank Account Holder Name:</span>
                 <span style={{ fontWeight: 400 }}> {holderName || '—'}</span>
               </td>
             </tr>
