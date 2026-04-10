@@ -15,12 +15,11 @@ export default function App() {
 
   const INITIAL_CLAIMS = [
     { patientId: 'P001', service: 'ECC001', otpToken: '482910', price: 100000 },
-    { patientId: 'P002', service: 'EmOC002', otpToken: '750293', price: 120000 },
-    { patientId: 'P003', service: 'EmOC-ADD005', otpToken: '129485', price: 130000 },
-    { patientId: 'P004', service: 'ECC004', otpToken: '398471', price: 140000 },
-    { patientId: 'P005', service: 'ECC-ADD002', otpToken: '129485', price: 130000 },
-    { patientId: 'P006', service: 'EmOC-ADD001', otpToken: '398471', price: 140000 },
-    { patientId: 'P007', service: 'EmOC-ADD002', otpToken: '398471', price: 140000 },
+    { patientId: 'P001', service: 'ECC-ADD001', otpToken: '750293', price: 120000 },
+    { patientId: 'P002', service: 'EmOC001', otpToken: '129485', price: 130000 },
+    { patientId: 'P002', service: 'EmOC-ADD002', otpToken: '398471', price: 140000 },
+    { patientId: 'P003', service: 'ECC002', otpToken: '129485', price: 130000 },
+    { patientId: 'P003', service: 'ECC-ADD004', otpToken: '398471', price: 140000 },
     ];
 
   /** One purchase row per claim row (no merging by service/price). */
@@ -35,12 +34,14 @@ export default function App() {
 
   const [claimTable, setClaimTable] = useState(INITIAL_CLAIMS);
   const [items, setItems] = useState(() => mapClaimsToPurchaseRows(INITIAL_CLAIMS));
-  const eccCount = claimTable.filter((row) =>
-    String(row.service || '').toLowerCase().includes('ecc')
-  ).length;
-  const emocCount = claimTable.filter((row) =>
-    String(row.service || '').toLowerCase().includes('emoc')
-  ).length;
+  const eccCount = claimTable.filter((row) => {
+    const service = String(row.service || '').toLowerCase();
+    return service.includes('ecc') && !service.includes('add');
+  }).length;
+  const emocCount = claimTable.filter((row) => {
+    const service = String(row.service || '').toLowerCase();
+    return service.includes('emoc') && !service.includes('add');
+  }).length;
 
   useEffect(() => {
     setItems((prev) => {
