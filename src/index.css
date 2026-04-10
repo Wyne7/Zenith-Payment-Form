@@ -1,6 +1,6 @@
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
+  --text: #000000;
+  --text-h: #000000;
   --bg: #fff;
   --border: #e5e4e7;
   --code-bg: #f4f3ec;
@@ -32,8 +32,8 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
+    --text: #000000;
+    --text-h: #000000;
     --bg: #16171d;
     --border: #2e303a;
     --code-bg: #1f2028;
@@ -52,6 +52,7 @@
 
 body {
   margin: 0;
+  color: #000000;
 }
 
 input[type='text'],
@@ -60,6 +61,13 @@ input[type='date'],
 textarea,
 select {
   font-family: Calibri, Arial, sans-serif;
+  color: #000000;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #000000;
+  opacity: 0.55;
 }
 
 #root {
@@ -72,13 +80,36 @@ select {
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  color: #000000;
+}
+
+/* App uses Tailwind text-gray / text-slate / text-blue utilities — force black text */
+#root [class*='text-gray'],
+#root [class*='text-slate'],
+#root [class*='text-blue'] {
+  color: #000000 !important;
+}
+
+#root button,
+#root button * {
+  color: #ffffff !important;
+}
+
+#root .remove-row-btn,
+#root .remove-row-btn * {
+  color: #dc2626 !important;
+}
+
+#root .remove-row-btn:hover,
+#root .remove-row-btn:hover * {
+  color: #991b1b !important;
 }
 
 h1,
 h2 {
   font-family: var(--heading);
   font-weight: 500;
-  color: var(--text-h);
+  color: #000000;
 }
 
 h1 {
@@ -108,7 +139,7 @@ code,
   font-family: var(--mono);
   display: inline-flex;
   border-radius: 4px;
-  color: var(--text-h);
+  color: #000000;
 }
 
 code {

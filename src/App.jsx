@@ -11,13 +11,16 @@ export default function App() {
   const [verifyBy, setVerifyBy] = useState('');
   const [dateOfRequest, setDateOfRequest] = useState('');
   const [dateRequired, setDateRequired] = useState('');
-  const [servicesChecked, setServicesChecked] = useState(false);
+  const [servicesChecked, setServicesChecked] = useState(true);
 
   const INITIAL_CLAIMS = [
     { patientId: 'P001', service: 'ECC001', otpToken: '482910', price: 100000 },
-    { patientId: 'P002', service: 'ECC002', otpToken: '750293', price: 120000 },
-    { patientId: 'P003', service: 'ECC003', otpToken: '129485', price: 130000 },
+    { patientId: 'P002', service: 'EmOC002', otpToken: '750293', price: 120000 },
+    { patientId: 'P003', service: 'EmOC-ADD005', otpToken: '129485', price: 130000 },
     { patientId: 'P004', service: 'ECC004', otpToken: '398471', price: 140000 },
+    { patientId: 'P005', service: 'ECC-ADD002', otpToken: '129485', price: 130000 },
+    { patientId: 'P006', service: 'EmOC-ADD001', otpToken: '398471', price: 140000 },
+    { patientId: 'P007', service: 'EmOC-ADD002', otpToken: '398471', price: 140000 },
     ];
 
   /** One purchase row per claim row (no merging by service/price). */
@@ -32,6 +35,12 @@ export default function App() {
 
   const [claimTable, setClaimTable] = useState(INITIAL_CLAIMS);
   const [items, setItems] = useState(() => mapClaimsToPurchaseRows(INITIAL_CLAIMS));
+  const eccCount = claimTable.filter((row) =>
+    String(row.service || '').toLowerCase().includes('ecc')
+  ).length;
+  const emocCount = claimTable.filter((row) =>
+    String(row.service || '').toLowerCase().includes('emoc')
+  ).length;
 
   useEffect(() => {
     setItems((prev) => {
@@ -84,15 +93,22 @@ export default function App() {
 
   const total = items.reduce((sum, item) => sum + calculateAmount(item), 0);
 
+  /** Formats date for PDF (and labels using this helper): dd/mm/yyyy */
   const formatDateDisplay = (iso) => {
     if (!iso) return '—';
-    const d = new Date(iso + 'T12:00:00');
-    if (Number.isNaN(d.getTime())) return iso;
-    return d.toLocaleDateString(undefined, {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    });
+    const parts = String(iso).trim().split('-');
+    if (parts.length === 3) {
+      const [y, m, d] = parts;
+      if (y && m && d && /^\d+$/.test(y + m + d)) {
+        return `${d.padStart(2, '0')}/${m.padStart(2, '0')}/${y}`;
+      }
+    }
+    const dt = new Date(iso + 'T12:00:00');
+    if (Number.isNaN(dt.getTime())) return iso;
+    const dd = String(dt.getDate()).padStart(2, '0');
+    const mm = String(dt.getMonth() + 1).padStart(2, '0');
+    const yyyy = String(dt.getFullYear());
+    return `${dd}/${mm}/${yyyy}`;
   };
 
   const invoiceRef = useRef(null);
@@ -176,7 +192,7 @@ export default function App() {
         <div className="max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-4">
             <label className="flex flex-col gap-1 min-w-0">
-              <span className="text-gray-800">Request by:</span>
+              <span className="text-gray-800">Requested by:</span>
               <input
                 type="text"
                 value={requestBy}
@@ -207,7 +223,7 @@ export default function App() {
             </label>
 
             <label className="flex flex-col gap-1 min-w-0">
-              <span className="text-gray-800">Verify by:</span>
+              <span className="text-gray-800">Verified by:</span>
               <input
                 type="text"
                 value={verifyBy}
@@ -270,9 +286,18 @@ export default function App() {
 
       <div className="bg-white rounded-xl shadow-lg p-6 mb-10">
         <h2 className="text-xl font-semibold mb-4">Claim table</h2>
+        <div className="mb-4 flex flex-wrap gap-3 text-sm">
+          <span className="px-3 py-1 rounded border border-gray-300 bg-gray-50">
+            ECC cases: <strong>{eccCount}</strong>
+          </span>
+          <span className="px-3 py-1 rounded border border-gray-300 bg-gray-50">
+            EmOC cases: <strong>{emocCount}</strong>
+          </span>
+        </div>
         <table className="w-full border-collapse border border-gray-300">
           <thead>
             <tr className="bg-gray-100">
+              <th className="border px-4 py-3 text-center w-16">No</th>
               <th className="border px-4 py-3 text-left">Patient ID</th>
               <th className="border px-4 py-3 text-left">Services Packages</th>
               <th className="border px-4 py-3 text-center">OTP Token</th>
@@ -282,6 +307,7 @@ export default function App() {
           <tbody>
             {claimTable.map((item, index) => (
               <tr key={`${item.patientId}-${index}`} className="hover:bg-gray-50">
+                <td className="border p-3 text-center">{index + 1}</td>
                 <td className="border p-3 font-medium">{item.patientId}</td>
                 <td className="border p-3">{item.service}</td>
                 <td className="border p-3 text-center font-mono">{item.otpToken}</td>
@@ -308,6 +334,7 @@ export default function App() {
         <table className="w-full border-collapse border border-gray-300">
           <thead>
             <tr className="bg-gray-100">
+              <th className="border px-4 py-3 text-center w-16">No</th>
               <th className="border px-4 py-3 text-left w-32">Patient ID</th>
               <th className="border px-4 py-3 text-left">Service Package</th>
               <th className="border px-4 py-3 w-28">Qty</th>
@@ -319,6 +346,7 @@ export default function App() {
           <tbody>
             {items.map((item, index) => (
               <tr key={index} className="hover:bg-gray-50">
+                <td className="border p-2 text-center">{index + 1}</td>
                 <td className="border p-2">
                   <input
                     type="text"
@@ -334,8 +362,9 @@ export default function App() {
                     type="text"
                     value={item.servicePackage || ''}
                     onChange={(e) => updateItem(index, 'servicePackage', e.target.value)}
+                    readOnly={!item.manual}
                     placeholder="Package code or name"
-                    className="w-full px-2 py-1 border border-gray-300 rounded focus:border-blue-500 focus:outline-none"
+                    className={`w-full px-2 py-1 border border-gray-300 rounded focus:border-blue-500 focus:outline-none ${!item.manual ? 'bg-gray-50 text-gray-800' : ''}`}
                   />
                 </td>
                 <td className="border p-2">
@@ -365,7 +394,7 @@ export default function App() {
                   <button
                     type="button"
                     onClick={() => deleteRow(index)}
-                    className="text-red-600 hover:text-red-800 text-xl font-bold"
+                    className="remove-row-btn text-red-600 hover:text-red-800 text-xl font-bold"
                     aria-label="Remove row"
                   >
                     ×
@@ -376,7 +405,7 @@ export default function App() {
 
             {items.length === 0 && (
               <tr>
-                <td colSpan={6} className="text-center py-6 text-gray-500 italic">
+                <td colSpan={7} className="text-center py-6 text-gray-500 italic">
                   No items yet. Click &quot;Add Row&quot; to start.
                 </td>
               </tr>
@@ -416,6 +445,7 @@ export default function App() {
           boxSizing: 'border-box',
           fontFamily: 'Calibri, Arial, sans-serif',
           fontSize: '14px',
+          textAlign: 'left',
         }}
       >
         <h1 className="text-3xl font-bold text-center mb-8 text-gray-800 flex flex-col gap-1 items-center">
@@ -444,7 +474,7 @@ export default function App() {
                   textAlign: 'left',
                 }}
               >
-                <span style={{ fontWeight: 700 }}>Request by:</span>
+                <span style={{ fontWeight: 700 }}>Requested by:</span>
                 <span style={{ fontWeight: 400 }}> {requestBy || '—'}</span>
               </td>
               <td style={{ width: '18%', padding: 0 }} aria-hidden="true" />
@@ -502,7 +532,7 @@ export default function App() {
                   textAlign: 'left',
                 }}
               >
-                <span style={{ fontWeight: 700 }}>Verify by:</span>
+                <span style={{ fontWeight: 700 }}>Verified by:</span>
                 <span style={{ fontWeight: 400 }}> {verifyBy || '—'}</span>
               </td>
               <td style={{ padding: 0 }} aria-hidden="true" />
@@ -533,6 +563,42 @@ export default function App() {
                 {servicesChecked ? '☑' : '☐'} Services (Emergency Child Care Services, Emergency Obstetric Care Services)
               </td>
             </tr>
+            <tr>
+              <td colSpan={3} style={{ padding: '6px 0 14px 0', textAlign: 'left' }}>
+                <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                  <span
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      padding: '6px 12px',
+                      border: 'none',
+                      borderRadius: '0',
+                      fontSize: '14px',
+                      lineHeight: '1.2',
+                      backgroundColor: 'transparent',
+                    }}
+                  >
+                    <span style={{ fontWeight: 700 }}>ECC cases:</span>
+                    <span style={{ marginLeft: '6px', fontWeight: 700 }}>{eccCount}</span>
+                  </span>
+                  <span
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      padding: '6px 12px',
+                      border: 'none',
+                      borderRadius: '0',
+                      fontSize: '14px',
+                      lineHeight: '1.2',
+                      backgroundColor: 'transparent',
+                    }}
+                  >
+                    <span style={{ fontWeight: 700 }}>EmOC cases:</span>
+                    <span style={{ marginLeft: '6px', fontWeight: 700 }}>{emocCount}</span>
+                  </span>
+                </div>
+              </td>
+            </tr>
           </tbody>
         </table>
 
@@ -545,10 +611,13 @@ export default function App() {
         >
           <thead>
             <tr style={{ backgroundColor: '#f3f4f6' }}>
-              <th style={{ border: '1px solid #000', padding: '8px', width: '14%', textAlign: 'left' }}>
+              <th style={{ border: '1px solid #000', padding: '8px', width: '6%', textAlign: 'center' }}>
+                No
+              </th>
+              <th style={{ border: '1px solid #000', padding: '8px', width: '12%', textAlign: 'left' }}>
                 Patient ID
               </th>
-              <th style={{ border: '1px solid #000', padding: '8px', width: '28%', textAlign: 'left' }}>
+              <th style={{ border: '1px solid #000', padding: '8px', width: '24%', textAlign: 'left' }}>
                 Service Package
               </th>
               <th style={{ border: '1px solid #000', padding: '8px', width: '10%', textAlign: 'center' }}>
@@ -565,6 +634,9 @@ export default function App() {
           <tbody>
             {items.map((item, i) => (
               <tr key={i}>
+                <td style={{ border: '1px solid #000', padding: '8px', textAlign: 'center' }}>
+                  {i + 1}
+                </td>
                 <td style={{ border: '1px solid #000', padding: '8px', textAlign: 'left' }}>
                   {item.patientId || '—'}
                 </td>
@@ -586,7 +658,7 @@ export default function App() {
             ))}
             <tr style={{ fontWeight: 'bold', backgroundColor: '#f3f4f6' }}>
               <td
-                colSpan={4}
+                colSpan={5}
                 style={{ border: '1px solid #000', padding: '8px', textAlign: 'right' }}
               >
                 Total Amount (MMK)
@@ -598,9 +670,9 @@ export default function App() {
           </tbody>
         </table>
 
-        <div style={{ marginTop: '40px' }}>
-          <div style={{ fontWeight: 'bold', marginBottom: '8px' }}>APPROVAL:</div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '30px' }}>
+        <div style={{ marginTop: '10px', textAlign: 'left' }}>
+          <div style={{ fontWeight: 'bold', marginBottom: '24px' }}>APPROVAL:</div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '90px' }}>
             <div style={{ textAlign: 'center' }}>
               <div style={{ borderBottom: '1px solid #000', width: '240px', height: '24px' }}></div>
               <div style={{ fontSize: '12px', marginTop: '4px' }}>
